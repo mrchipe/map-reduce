@@ -26,7 +26,7 @@ foreach ($texts as $text) {
         }
 
         $word = mb_strtolower(trim($word), 'UTF-8');
-        $length = mb_strlen($word, 'UTF-8');
+        $length = strlen($word);
 
         if ($length < 5) {
             $cpt_min5++;
