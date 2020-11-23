@@ -30,13 +30,10 @@ foreach ($texts as $text) {
         $word = trim($word);
 
         if (mb_strlen($word, 'UTF-8') < 5) {
-            $list[0][] = $word;
             $cpt_min5++;
         } elseif (mb_strlen($word, 'UTF-8') >= 5 && mb_strlen($word, 'UTF-8') <= 9) {
-            $list[1][] = $word;
             $cpt_bt5and9++;
         } elseif (mb_strlen($word, 'UTF-8') >= 10) {
-            $list[2][] = $word;
             $cpt_more10++;
         }
     }
