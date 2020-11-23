@@ -14,11 +14,14 @@ for ($i = 1; $i <= 10; $i++) {
     $texts = array_merge($texts, get_texts($path . $i));
 }
 
+$texts = preg_replace('/[,.\-:;!?`[\]=><()\r\t\n]/', ' ', $texts);
+$texts = preg_grep("/[(\p{L}*)'’]*/", $texts);
+
 foreach ($texts as $text) {
     $words = explode(' ', $text);
 
     foreach ($words as $word) {
-        $word = preg_replace('/[,.\-:;!?`[\]="><()]+/', '', mb_strtolower($word, 'UTF-8'));
+        $word = mb_strtolower($word, 'UTF-8');
 
         if (empty($word)) {
             continue;
@@ -27,22 +30,40 @@ foreach ($texts as $text) {
         $word = trim($word);
 
         if (mb_strlen($word, 'UTF-8') < 5) {
+            $list[0][] = $word;
             $cpt_min5++;
         } elseif (mb_strlen($word, 'UTF-8') >= 5 && mb_strlen($word, 'UTF-8') <= 9) {
+            $list[1][] = $word;
             $cpt_bt5and9++;
-        } elseif (mb_strlen($word, 'UTF-8') > 10) {
+        } elseif (mb_strlen($word, 'UTF-8') >= 10) {
+            $list[2][] = $word;
             $cpt_more10++;
         }
     }
 }
 
-dd($cpt_min5, $cpt_bt5and9, $cpt_more10, $cpt_min5 + $cpt_bt5and9 + $cpt_more10);
+echo 'Mots -5 caractéres : ' . $cpt_min5 . PHP_EOL;
+echo 'Mots +5 ou -9 caractéres : ' . $cpt_bt5and9 . PHP_EOL;
+echo 'Mots +10 caractéres : ' . $cpt_more10 . PHP_EOL;
+
+echo 'Total : ' . ($cpt_min5 + $cpt_bt5and9 + $cpt_more10);
 
 exit(0);
 
 /*
  * FUNCTIONS
  */
+
+function csv($list)
+{
+    $f = fopen('data.csv', 'w');
+
+    foreach ($list as $fields) {
+        fputcsv($f, $fields);
+    }
+
+    fclose($f);
+}
 
 function get_texts($url)
 {
