@@ -21,19 +21,18 @@ foreach ($texts as $text) {
     $words = explode(' ', $text);
 
     foreach ($words as $word) {
-        $word = mb_strtolower($word, 'UTF-8');
-
         if (empty($word)) {
             continue;
         }
 
-        $word = trim($word);
+        $word = mb_strtolower(trim($word), 'UTF-8');
+        $length = mb_strlen($word, 'UTF-8');
 
-        if (mb_strlen($word, 'UTF-8') < 5) {
+        if ($length < 5) {
             $cpt_min5++;
-        } elseif (mb_strlen($word, 'UTF-8') >= 5 && mb_strlen($word, 'UTF-8') <= 9) {
+        } elseif ($length >= 5 && $length <= 9) {
             $cpt_bt5and9++;
-        } elseif (mb_strlen($word, 'UTF-8') >= 10) {
+        } elseif ($length >= 10) {
             $cpt_more10++;
         }
     }
@@ -50,17 +49,6 @@ exit(0);
 /*
  * FUNCTIONS
  */
-
-function csv($list)
-{
-    $f = fopen('data.csv', 'w');
-
-    foreach ($list as $fields) {
-        fputcsv($f, $fields);
-    }
-
-    fclose($f);
-}
 
 function get_texts($url)
 {
